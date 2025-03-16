@@ -157,3 +157,55 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('[data-form]');
+  const feedback = document.getElementById('form-feedback');
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    // Clear previous feedback
+    feedback.textContent = '';
+    feedback.classList.remove('success', 'error');
+
+    // Get form data
+    const formData = new FormData(form);
+    const fullname = formData.get('fullname');
+    const email = formData.get('email');
+    const message = formData.get('message');
+
+    // Simple validation
+    if (!fullname || !email || !message) {
+      feedback.textContent = 'Please fill in all fields.';
+      feedback.classList.add('error');
+      return;
+    }
+
+       // Simulate form submission (replace with actual submission logic)
+       setTimeout(() => {
+        feedback.textContent = 'Thank you for your message!';
+        feedback.classList.add('success');
+        form.reset();
+      }, 1000);
+    });
+  });
+
+    // Send form data to the backend
+    fetch('/submit-form', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ fullname, email, message })
+    })
+    .then(response => response.text())
+    .then(data => {
+      feedback.textContent = data;
+      feedback.classList.add('success');
+      form.reset();
+    })
+    .catch(error => {
+      feedback.textContent = 'Error submitting form';
+      feedback.classList.add('error');
+    });
+
