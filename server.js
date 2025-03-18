@@ -9,7 +9,7 @@ const path = require('path');
 dotenv.config();
 
 const app = express();
-const port = 5500;
+const port = process.env.PORT || 5500;
 
 // Enable CORS
 app.use(cors());
@@ -76,7 +76,7 @@ app.post('/submit-form', upload.single('cv'), (req, res) => {
         return res.status(500).send('Error sending confirmation email to user');
       }
       console.log('Confirmation email sent to user:', info.response);
-      res.status(200).send({ success: 'Emails sent successfully' });
+      res.status(200).send({ success: 'Email sent successfully!' });
     });
   });
 });
