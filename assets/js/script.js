@@ -181,31 +181,21 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-       // Simulate form submission (replace with actual submission logic)
-       setTimeout(() => {
-        feedback.textContent = 'Thank you for your message!';
-        feedback.classList.add('success');
-        form.reset();
-      }, 1000);
-    });
-  });
-
     // Send form data to the backend
-    fetch('/submit-form', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+    fetch("http://localhost:5500/submit-form", {  // Update the URL to match your server
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fullname, email, message })
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-      feedback.textContent = data;
-      feedback.classList.add('success');
-      form.reset();
+      feedback.textContent = data.success || data.error;
+      feedback.classList.add(data.success ? 'success' : 'error');
     })
     .catch(error => {
+      console.error("Error:", error);
       feedback.textContent = 'Error submitting form';
       feedback.classList.add('error');
     });
-
+  });
+});

@@ -2,11 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 const port = 5500;
+
+// Enable CORS
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -27,7 +31,7 @@ app.post('/submit-form', (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: 'recipient-email@gmail.com',
+    to: 'valid-recipient-email@gmail.com',
     subject: 'New Contact Form Submission',
     text: `Name: ${fullname}\nEmail: ${email}\nMessage: ${message}`
   };
@@ -38,10 +42,14 @@ app.post('/submit-form', (req, res) => {
       return res.status(500).send('Error sending email');
     }
     console.log('Email sent:', info.response);
-    res.status(200).send('Email sent: ' + info.response);
+    res.status(200).send({ success: 'Email sent: ' + info.response });
   });
 });
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+});
+
+app.get('/', (req, res) => {
+  res.send('Server is running!');
 });
