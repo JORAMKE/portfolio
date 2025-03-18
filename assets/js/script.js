@@ -157,7 +157,7 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
-document.addEventListener('DOMContentLoaded', function () {
+dodocument.addEventListener('DOMContentLoaded', function () {
   const form = document.querySelector('[data-form]');
   const feedback = document.getElementById('form-feedback');
 
@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fullname = formData.get('fullname');
     const email = formData.get('email');
     const message = formData.get('message');
+    const cv = formData.get('cv');  // Get the uploaded CV file
 
     // Simple validation
     if (!fullname || !email || !message) {
@@ -184,8 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Send form data to the backend
     fetch("http://localhost:5500/submit-form", {  // Update the URL to match your server
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fullname, email, message })
+      body: formData  // Send the form data including the file
     })
     .then(response => response.json())
     .then(data => {
