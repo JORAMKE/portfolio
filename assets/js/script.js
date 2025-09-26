@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Send form data to the backend
-    fetch("http://localhost:5500/submit-form", {  // Update the URL to match your deployed backend server
+    fetch("https://portfolio-i323.onrender.com", {  // Update the URL to match your deployed backend server
       method: "POST",
       body: formData  // Send the form data including the file
     })
