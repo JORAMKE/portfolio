@@ -24,15 +24,8 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Ensure this directory exists
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
+// Configure multer for in-memory file storage
+const storage = multer.memoryStorage(); // Store files in memory as Buffers
 
 // File filter to allow only specific file types
 const fileFilter = (req, file, cb) => {
@@ -54,9 +47,9 @@ const upload = multer({
 app.post('/submit-form', upload.single('cv'), (req, res) => {
   try {
     const { fullname, email, message } = req.body;
-    const cvPath = req.file ? req.file.path : null;
+    const cvBuffer = req.file ? req.file.buffer : null; // Access the file as a Buffer
 
-    console.log('Form submission received:', { fullname, email, message, cvPath });
+    console.log('Form submission received:', { fullname, email, message, fileSize: req.file?.size });
 
     // Send email using nodemailer
     const transporter = nodemailer.createTransport({
@@ -72,7 +65,14 @@ app.post('/submit-form', upload.single('cv'), (req, res) => {
       to: 'jorammusau25@gmail.com', // Replace with your email address
       subject: 'New Contact Form Submission',
       text: `Name: ${fullname}\nEmail: ${email}\nMessage: ${message}`,
-      attachments: cvPath ? [{ path: cvPath }] : []
+      attachments: cvBuffer
+        ? [
+            {
+              filename: req.file.originalname,
+              content: cvBuffer // Attach the file directly from memory
+            }
+          ]
+        : []
     };
 
     const mailOptionsToUser = {
@@ -113,3 +113,4 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
   res.send('Server is running!');
 });
+ 

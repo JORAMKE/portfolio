@@ -1911,3 +1911,32 @@ textarea.form-input::-webkit-resizer { display: none; }
   background-color: #f8d7da;
   border-color: #f5c6cb;
 }
+.file-input-container {
+  display: absolute;
+  align-items: center;
+  position: relative;
+}
+
+.file-input-container input[type="file"] {
+  flex: 1;
+  padding-right: 40px; /* Add space for the button */
+}
+
+.file-input-container .remove-btn {
+  position: relative;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ff4d4d; /* Red color for remove */
+   color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.file-input-container .remove-btn:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}  
+
+

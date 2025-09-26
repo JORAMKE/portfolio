@@ -161,6 +161,15 @@ for (let i = 0; i < navigationLinks.length; i++) {
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.querySelector('[data-form]');
   const feedback = document.getElementById('form-feedback');
+  const fileInput = document.getElementById('cv-upload');
+  const removeButton = document.getElementById('remove-cv');
+
+  // Clear the file input when the "Remove" button is clicked
+  removeButton.addEventListener('click', function () {
+    fileInput.value = ''; // Clear the file input
+    // feedback.textContent = 'removed';
+    // feedback.classList.add('success');
+  });
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -174,7 +183,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const fullname = formData.get('fullname');
     const email = formData.get('email');
     const message = formData.get('message');
-    const cv = formData.get('cv');  // Get the uploaded CV file
+    const cv = formData.get('cv'); // Get the uploaded CV file
+
 
     // Simple validation
     if (!fullname || !email || !message) {
@@ -184,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Send form data to the backend
-    fetch("https://portfolio-i323.onrender.com/submit-form", {  // Update the URL to match your deployed backend server
+    fetch("http://localhost:5500/submit-form", {  // Update the URL to match your deployed backend server
       method: "POST",
       body: formData  // Send the form data including the file
     })
